@@ -1,0 +1,17 @@
+-- AlterTable
+ALTER TABLE `ClinicSetting`
+  ADD COLUMN `maxDailyAppointments` INTEGER NOT NULL DEFAULT 40,
+  ADD COLUMN `reservationExpiryMinutes` INTEGER NOT NULL DEFAULT 30;
+
+-- AlterTable
+ALTER TABLE `Appointment`
+  ADD COLUMN `bookingChannel` VARCHAR(191) NOT NULL DEFAULT 'ONLINE',
+  ADD COLUMN `overrideReason` TEXT NULL,
+  ADD COLUMN `reservationExpiresAt` DATETIME(3) NULL;
+
+-- AlterTable
+ALTER TABLE `Payment`
+  ADD COLUMN `paymentMethod` VARCHAR(191) NOT NULL DEFAULT 'UPI',
+  ADD COLUMN `refundedAt` DATETIME(3) NULL,
+  ADD COLUMN `refundReason` TEXT NULL,
+  MODIFY COLUMN `status` ENUM('PENDING', 'SUBMITTED', 'UNDER_VERIFICATION', 'VERIFIED', 'REJECTED', 'REFUNDED') NOT NULL DEFAULT 'PENDING';

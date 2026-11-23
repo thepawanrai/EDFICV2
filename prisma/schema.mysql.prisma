@@ -1,0 +1,459 @@
+// Hostinger Production MySQL Schema
+// To deploy with MySQL on Hostinger:
+// 1. Copy this file over prisma/schema.prisma (or pass --schema=prisma/schema.mysql.prisma)
+// 2. Set DATABASE_URL="mysql://USER:PASS@HOST:3306/DB_NAME"
+// 3. Run: npx prisma db push && npm run build
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  RECEPTION
+  PATIENT
+}
+
+enum ApprovalStatus {
+  DRAFT
+  MEDICAL_REVIEW
+  COMPLIANCE_REVIEW
+  FINAL_APPROVED
+  PUBLISHED
+}
+
+enum AppointmentStatus {
+  PENDING_ADVANCE
+  ADVANCE_SUBMITTED
+  CONFIRMED
+  CHECKED_IN
+  IN_PROGRESS
+  COMPLETED
+  RESCHEDULED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  PENDING
+  SUBMITTED
+  UNDER_VERIFICATION
+  VERIFIED
+  REJECTED
+  REFUNDED
+}
+
+enum VisitStatus {
+  WAITING
+  IN_SCAN
+  COMPLETED
+}
+
+enum ReportStatus {
+  DRAFT
+  UNDER_REVIEW
+  PUBLISHED
+  REVISED
+}
+
+enum LeadSource {
+  WEBSITE_CONTACT
+  BOOKING_INQUIRY
+  WHATSAPP
+  REFERRAL
+  WALK_IN
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  INFORMATION_PROVIDED
+  APPOINTMENT_REQUESTED
+  APPOINTMENT_CONFIRMED
+  VISITED
+  FOLLOW_UP
+  SCHEDULED
+  CONVERTED
+  CLOSED
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  phone        String?
+  role         UserRole  @default(PATIENT)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  patientProfile      Patient?
+  doctorAppointments  Appointment[]      @relation("DoctorAppointments")
+  verifiedPayments    Payment[]          @relation("PaymentVerifier")
+  doctorVisits        Visit[]            @relation("DoctorVisits")
+  uploadedReports     DiagnosticReport[] @relation("ReportUploader")
+  reviewedReports     DiagnosticReport[] @relation("ReportReviewer")
+  reportDownloads     ReportDownloadLog[]
+  assignedLeads       CrmLead[]          @relation("LeadAssignee")
+  assignedTasks       CrmTask[]          @relation("TaskAssignee")
+  authoredCms         CmsContentItem[]   @relation("CmsAuthor")
+  auditLogs           AuditLog[]
+}
+
+model Patient {
+  id               String    @id @default(cuid())
+  patientCode      String    @unique
+  userId           String?   @unique
+  user             User?     @relation(fields: [userId], references: [id])
+  fullName         String
+  phone            String
+  email            String?
+  dateOfBirth      String?
+  gender           String?
+  address          String?   @db.Text
+  emergencyContact String?
+  referredBy       String?
+  consentAccepted  Boolean   @default(false)
+  consentTimestamp DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  appointments  Appointment[]
+  payments      Payment[]
+  visits        Visit[]
+  reports       DiagnosticReport[]
+  downloadLogs  ReportDownloadLog[]
+  convertedFrom CrmLead[]
+}
+
+model ServiceCategory {
+  id          String              @id @default(cuid())
+  slug        String              @unique
+  name        String
+  description String              @db.Text
+  sortOrder   Int                 @default(0)
+  isVisible   Boolean             @default(true)
+  services    DiagnosticService[]
+}
+
+model DiagnosticService {
+  id                    String          @id @default(cuid())
+  slug                  String          @unique
+  code                  String          @unique
+  name                  String
+  categoryId            String
+  category              ServiceCategory @relation(fields: [categoryId], references: [id])
+  summary               String          @db.Text
+  clinicalDescription   String          @db.Text
+  preparationNotes      String          @db.Text
+  durationMinutes       Int             @default(30)
+  requiresDoctorMorning Boolean         @default(false)
+  isVisiblePublic       Boolean         @default(true)
+  approvalStatus        ApprovalStatus  @default(PUBLISHED)
+  advanceAmountInr      Int             @default(500)
+  internalBaseFeeInr    Int             @default(0)
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  appointments Appointment[]
+  slotHolds    SlotHold[]
+}
+
+model ClinicSetting {
+  id                      String   @id @default("singleton")
+  clinicName              String   @default("EDFIC")
+  fullName                String   @default("EWA Diagnostic and Fetal Imaging Centre")
+  parentUnitName          String   @default("A Unit of EWA DERMA")
+  tagline                 String   @default("Advanced Fetal Imaging & Diagnostic Services in Lucknow.")
+  addressLine             String   @default("Unit 10, Millennium Place, Sushant Golf City")
+  landmark                String   @default("Near Lulu Mall")
+  cityStateCountry        String   @default("Lucknow, Uttar Pradesh, India")
+  primaryPhone            String   @default("")
+  secondaryPhone          String   @default("")
+  whatsappNumber          String   @default("")
+  officialEmail           String   @default("")
+  weekdayHours            String   @default("Monday–Saturday: 9:00 AM – 8:00 PM")
+  sundayHours             String   @default("Sunday: 10:00 AM – 2:00 PM (By Appointment)")
+  slotDurationMinutes      Int      @default(30)
+  slotCapacityPerSlot      Int      @default(2)
+  maxDailyAppointments     Int      @default(40)
+  reservationExpiryMinutes Int      @default(30)
+  morningSessionStart      String   @default("09:30")
+  morningSessionEnd        String   @default("13:30")
+  upiId                    String   @default("edfic.lucknow@upi")
+  upiMerchantName          String   @default("EWA Diagnostic & Fetal Imaging Centre")
+  defaultAdvanceAmountInr  Int      @default(500)
+  n8nWebhookUrl             String    @default("")
+  n8nWebhookSecret          String    @default("")
+  n8nApiKey                 String    @default("")
+  n8nConnectionStatus       String    @default("NOT_CONFIGURED")
+  n8nLastCheckedAt          DateTime?
+  whatsappProvider          String    @default("meta_cloud")
+  whatsappApiUrl            String    @default("")
+  whatsappPhoneNumberId     String    @default("")
+  whatsappAccessToken       String    @default("")
+  whatsappWebhookSecret     String    @default("")
+  whatsappTemplatesJson     String    @default("") @db.Text
+  whatsappConnectionStatus  String    @default("NOT_CONFIGURED")
+  whatsappLastCheckedAt     DateTime?
+  updatedAt                 DateTime  @updatedAt
+}
+
+model ClinicHoliday {
+  id        String   @id @default(cuid())
+  date      String   @unique
+  reason    String
+  isFullDay Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model SlotHold {
+  id           String            @id @default(cuid())
+  date         String
+  startTime    String
+  serviceId    String
+  service      DiagnosticService @relation(fields: [serviceId], references: [id])
+  sessionToken String
+  expiresAt    DateTime
+  createdAt    DateTime          @default(now())
+
+  @@index([date, startTime])
+}
+
+model Appointment {
+  id                  String            @id @default(cuid())
+  bookingReference    String            @unique
+  patientId           String
+  patient             Patient           @relation(fields: [patientId], references: [id])
+  serviceId           String
+  service             DiagnosticService @relation(fields: [serviceId], references: [id])
+  doctorId            String?
+  doctor              User?             @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  appointmentDate     String
+  startTime           String
+  endTime             String
+  status              AppointmentStatus @default(PENDING_ADVANCE)
+  patientName         String
+  patientPhone        String
+  patientEmail        String?
+  clinicalIndication   String?           @db.Text
+  referringDoctor      String?
+  bookingChannel       String            @default("ONLINE")
+  isReceptionOverride  Boolean           @default(false)
+  overrideReason       String?           @db.Text
+  reservationExpiresAt DateTime?
+  notes                String?           @db.Text
+  cancelledReason      String?           @db.Text
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+
+  payments    Payment[]
+  visit       Visit?
+  linkedLeads CrmLead[]
+
+  @@index([appointmentDate, startTime])
+  @@index([patientId])
+}
+
+model Payment {
+  id                 String        @id @default(cuid())
+  receiptNumber      String?       @unique
+  appointmentId      String
+  appointment        Appointment   @relation(fields: [appointmentId], references: [id])
+  patientId          String
+  patient            Patient       @relation(fields: [patientId], references: [id])
+  paymentMethod      String        @default("UPI")
+  expectedAdvanceInr Int
+  amountSubmittedInr Int
+  totalServiceFeeInr Int           @default(0)
+  utrReference       String
+  paymentDate        String
+  evidenceFilePath   String?
+  evidenceMimeType   String?
+  status             PaymentStatus @default(PENDING)
+  verifiedById       String?
+  verifiedBy         User?         @relation("PaymentVerifier", fields: [verifiedById], references: [id])
+  verifiedAt         DateTime?
+  rejectionReason    String?       @db.Text
+  refundedAt         DateTime?
+  refundReason       String?       @db.Text
+  notes              String?       @db.Text
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  @@index([status])
+  @@index([appointmentId])
+}
+
+model Visit {
+  id            String      @id @default(cuid())
+  visitNumber   String      @unique
+  appointmentId String      @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  patientId     String
+  patient       Patient     @relation(fields: [patientId], references: [id])
+  doctorId      String?
+  doctor        User?       @relation("DoctorVisits", fields: [doctorId], references: [id])
+  checkedInAt   DateTime    @default(now())
+  completedAt   DateTime?
+  clinicalNotes String?     @db.Text
+  status        VisitStatus @default(WAITING)
+
+  reports DiagnosticReport[]
+}
+
+model DiagnosticReport {
+  id             String       @id @default(cuid())
+  reportCode     String       @unique
+  patientId      String
+  patient        Patient      @relation(fields: [patientId], references: [id])
+  visitId        String
+  visit          Visit        @relation(fields: [visitId], references: [id])
+  uploadedById   String
+  uploadedBy     User         @relation("ReportUploader", fields: [uploadedById], references: [id])
+  reviewedById   String?
+  reviewedBy     User?        @relation("ReportReviewer", fields: [reviewedById], references: [id])
+  title          String
+  revisionNumber Int          @default(1)
+  fileName       String
+  storedFilePath String
+  fileSizeBytes  Int
+  mimeType       String
+  status         ReportStatus @default(DRAFT)
+  publishedAt    DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  downloadLogs ReportDownloadLog[]
+
+  @@index([patientId, status])
+}
+
+model ReportDownloadLog {
+  id             String           @id @default(cuid())
+  reportId       String
+  report         DiagnosticReport @relation(fields: [reportId], references: [id])
+  downloadedById String?
+  downloadedBy   User?            @relation(fields: [downloadedById], references: [id])
+  patientId      String
+  patient        Patient          @relation(fields: [patientId], references: [id])
+  ipAddress      String?
+  userAgent      String?
+  downloadedAt   DateTime         @default(now())
+}
+
+model CrmLead {
+  id                 String     @id @default(cuid())
+  leadCode           String     @unique
+  fullName           String
+  phone              String
+  email              String?
+  source             LeadSource @default(WEBSITE_CONTACT)
+  interestedService  String?
+  message            String?    @db.Text
+  status             LeadStatus @default(NEW)
+  assignedToId       String?
+  assignedTo         User?      @relation("LeadAssignee", fields: [assignedToId], references: [id])
+  followUpDueAt      DateTime?
+  convertedPatientId  String?
+  convertedPatient    Patient?     @relation(fields: [convertedPatientId], references: [id])
+  linkedAppointmentId String?
+  linkedAppointment   Appointment? @relation(fields: [linkedAppointmentId], references: [id])
+  notes               String?      @db.Text
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  tasks CrmTask[]
+}
+
+model CrmTask {
+  id           String    @id @default(cuid())
+  leadId       String
+  lead         CrmLead   @relation(fields: [leadId], references: [id])
+  assignedToId String?
+  assignedTo   User?     @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  title        String
+  dueAt        DateTime?
+  isCompleted  Boolean   @default(false)
+  completedAt  DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model CmsContentItem {
+  id                          String         @id @default(cuid())
+  slug                        String         @unique
+  pageKey                     String
+  title                       String
+  contentMarkdown             String         @db.LongText
+  status                      ApprovalStatus @default(DRAFT)
+  checklistNoPrice            Boolean        @default(false)
+  checklistNoSexDetermination Boolean        @default(false)
+  checklistNoGuarantee        Boolean        @default(false)
+  checklistNoFakeTestimonial  Boolean        @default(false)
+  complianceIssues            String?        @db.Text
+  authorId                    String?
+  author                      User?          @relation("CmsAuthor", fields: [authorId], references: [id])
+  medicalReviewerName         String?
+  complianceReviewerName      String?
+  finalApproverName           String?
+  publishedAt                 DateTime?
+  createdAt                   DateTime       @default(now())
+  updatedAt                   DateTime       @updatedAt
+}
+
+model WebhookEvent {
+  id             String    @id @default(cuid())
+  eventId        String    @unique
+  eventType      String
+  targetSystem   String
+  payloadJson    String    @db.LongText
+  status         String    @default("PENDING")
+  attempts       Int       @default(0)
+  executionId    String?
+  responseStatus Int?
+  responseBody   String?   @db.Text
+  lastError      String?   @db.Text
+  lastAttemptAt  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model WhatsAppMessageLog {
+  id                String    @id @default(cuid())
+  eventId           String?   @unique
+  recipientPhone    String
+  templateKey       String
+  templateName      String?
+  messageBody       String    @db.Text
+  appointmentId     String?
+  status            String    @default("QUEUED")
+  provider          String
+  externalMessageId String?
+  webhookVerified   Boolean   @default(false)
+  deliveredAt       DateTime?
+  errorMessage      String?   @db.Text
+  createdAt         DateTime  @default(now())
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  actorUserId  String?
+  actor        User?    @relation(fields: [actorUserId], references: [id])
+  actorRole    String?
+  action       String
+  resourceType String
+  resourceId   String?
+  summary      String   @db.Text
+  metadataJson String?  @db.Text
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+
+  @@index([resourceType, createdAt])
+}

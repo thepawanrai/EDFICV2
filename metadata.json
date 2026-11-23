@@ -1,0 +1,6 @@
+{
+  "name": "EDFIC — EWA Diagnostic & Fetal Imaging Centre",
+  "description": "Advanced Fetal Imaging & Diagnostic Services in Lucknow. A Unit of EWA DERMA. Integrated healthcare website, appointment booking, CRM, patient management, and secure diagnostic report platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

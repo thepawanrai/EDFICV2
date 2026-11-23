@@ -1,0 +1,977 @@
+@import "tailwindcss";
+@custom-variant dark-teal (&:where(.dark-teal, .dark-teal *));
+
+@theme {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-display: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+}
+
+@layer base {
+  :root {
+    --edfic-primary: #0d4a5a;
+    --edfic-dark: #083642;
+    --edfic-secondary: #287887;
+    --edfic-aqua: #e9f3f3;
+    --edfic-offwhite: #ffffff;
+    --edfic-polar: #ffffff;
+    --edfic-text: #24343b;
+    --edfic-muted: #65747b;
+  }
+
+  html,
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #ffffff;
+    color: #24343b;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
+    font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  }
+
+  .font-mono-tabular {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.edfic-hero-gradient {
+  background: radial-gradient(circle at 82% 28%, rgba(40, 120, 135, 0.28) 0%, rgba(40, 120, 135, 0.05) 45%, rgba(255, 255, 255, 0) 70%),
+    linear-gradient(125deg, #f6fbfc 0%, #e1f0f4 48%, #c7e2ea 100%);
+}
+
+.edfic-hero-home5-bg {
+  background: radial-gradient(circle at 22% 72%, rgba(71, 151, 170, 0.28) 0%, rgba(13, 74, 90, 0) 52%),
+    radial-gradient(circle at 86% 18%, rgba(127, 211, 227, 0.16) 0%, rgba(13, 74, 90, 0) 46%),
+    linear-gradient(108deg, #062a34 0%, #0d4a5a 52%, #1d6b7d 100%);
+}
+
+.edfic-teal-band {
+  background: radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 48%),
+    linear-gradient(135deg, #0d4a5a 0%, #1d6b7d 52%, #4797aa 100%);
+}
+
+.edfic-card-elevated {
+  box-shadow: 0 22px 55px -16px rgba(13, 74, 90, 0.14), 0 4px 14px -4px rgba(13, 74, 90, 0.06);
+}
+
+.edfic-card-soft {
+  box-shadow: 0 12px 38px -14px rgba(13, 74, 90, 0.1), 0 1px 4px rgba(13, 74, 90, 0.04);
+}
+
+/* ProHealth-Inspired Motion & Micro-Interaction System */
+@keyframes edficRotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes edficFloatSlow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+@keyframes edficParticalDrift {
+  0%,
+  100% {
+    transform: translate(0px, 0px);
+  }
+  33% {
+    transform: translate(18px, -12px);
+  }
+  66% {
+    transform: translate(-10px, 14px);
+  }
+}
+
+@keyframes edficTabFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes edficWaveDraw {
+  0% {
+    stroke-dashoffset: 360;
+    opacity: 0.55;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -360;
+    opacity: 0.55;
+  }
+}
+
+.edfic-rotate-slow {
+  animation: edficRotate360 15s linear infinite;
+}
+
+.edfic-float-slow {
+  animation: edficFloatSlow 5.5s ease-in-out infinite;
+}
+
+.edfic-particle-drift {
+  animation: edficParticalDrift 12s ease-in-out infinite;
+}
+
+.edfic-tab-fade {
+  animation: edficTabFade 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.edfic-wave-trace {
+  stroke-dasharray: 360;
+  animation: edficWaveDraw 5.5s linear infinite;
+}
+
+@keyframes edficWordSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-85%);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(10%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes edficWordSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+  65% {
+    opacity: 0;
+    transform: translateY(75%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.edfic-word-in {
+  animation: edficWordSlideIn 0.58s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.edfic-word-out {
+  animation: edficWordSlideOut 0.52s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes edficAcousticRing {
+  0% {
+    transform: scale(0.84);
+    opacity: 0.36;
+  }
+  70% {
+    transform: scale(1.16);
+    opacity: 0.08;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+.edfic-acoustic-ring {
+  animation: edficAcousticRing 4.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes edficCtaPulseRing {
+  0% {
+    transform: scale(0.97);
+    opacity: 0.72;
+  }
+  70% {
+    transform: scale(1.14, 1.42);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.14, 1.42);
+    opacity: 0;
+  }
+}
+
+@keyframes edficCtaBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.028);
+  }
+}
+
+.edfic-cta-pulse {
+  animation: edficCtaBreathe 2.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.edfic-cta-pulse:hover {
+  animation-play-state: paused;
+}
+
+.edfic-cta-pulse-ring {
+  animation: edficCtaPulseRing 2.3s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Sliding Double-Arrow Button (.cs_btn.cs_style_1 style) */
+.edfic-btn-slide {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(134deg, #287887 0%, #0d4a5a 100%);
+  transition: transform 0.3s ease, box-shadow 0.35s ease;
+}
+
+.edfic-btn-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(270deg, #287887 0%, #083642 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.edfic-btn-slide:hover::after {
+  opacity: 1;
+}
+
+.edfic-btn-slide:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px -8px rgba(13, 74, 90, 0.4);
+}
+
+.edfic-btn-arrows {
+  position: relative;
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.edfic-btn-arrows svg:first-child {
+  position: absolute;
+  left: -20px;
+  top: 0;
+  transition: left 0.4s ease-in-out;
+}
+
+.edfic-btn-arrows svg:last-child {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: left 0.4s ease-in-out;
+}
+
+.edfic-btn-slide:hover .edfic-btn-arrows svg:first-child {
+  left: 0;
+}
+
+.edfic-btn-slide:hover .edfic-btn-arrows svg:last-child {
+  left: 20px;
+}
+
+/* Elastic Underline Link (.cs_text_btn_2 style) */
+.edfic-link-elastic .edfic-link-text {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 3px;
+}
+
+.edfic-link-elastic .edfic-link-text::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.6s ease-out;
+}
+
+.edfic-link-elastic .edfic-link-icon {
+  transition: transform 0.4s ease-in-out;
+}
+
+.edfic-link-elastic:hover .edfic-link-text::before {
+  transform: scaleX(1);
+  transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+}
+
+.edfic-link-elastic:hover .edfic-link-icon {
+  transform: scale(1.12);
+}
+
+/* Expanding Aqua Halo Behind Feature Card Title (.cs_feature.cs_style_1 style) */
+.edfic-value-card .edfic-value-head {
+  position: relative;
+}
+
+.edfic-value-card .edfic-value-head::before {
+  content: "";
+  position: absolute;
+  height: calc(100% + 26px);
+  width: calc(100% + 44px);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.55);
+  opacity: 0;
+  border-radius: 9999px;
+  background-color: #d7eef4;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  z-index: 0;
+}
+
+.edfic-value-card:hover .edfic-value-head::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Center-Out Expanding Radio Underline (.cs_appointment_category style) */
+.edfic-radio-chip span {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 4px;
+  transition: color 0.3s ease;
+}
+
+.edfic-radio-chip span::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 0%;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #287887;
+  transition: width 0.3s ease;
+}
+
+.edfic-radio-chip input:checked + span {
+  color: #083642;
+  font-weight: 600;
+}
+
+.edfic-radio-chip input:checked + span::before {
+  width: 100%;
+}
+
+/* Scroll-Triggered Entrance Reveal */
+.edfic-reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.edfic-reveal.edfic-revealed,
+.edfic-reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Smooth Natural Route / Page Entrance Transition */
+@keyframes edficPageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.edfic-page-enter {
+  animation: edficPageEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Global Router Soft Fade-In (Opacity-only so sticky headers remain anchored) */
+@keyframes edficRouteFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.edfic-route-fade {
+  animation: edficRouteFadeIn 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Smooth CSS Grid Accordion Animation */
+.edfic-accordion-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.edfic-accordion-grid.is-open {
+  grid-template-rows: 1fr;
+}
+
+.edfic-accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Pulsing Ultrasonic Preloader Animations */
+@keyframes edficPreloaderPulse {
+  0% {
+    transform: scale(0.62);
+    opacity: 0.72;
+  }
+  70% {
+    transform: scale(1.18);
+    opacity: 0.16;
+  }
+  100% {
+    transform: scale(1.36);
+    opacity: 0;
+  }
+}
+
+@keyframes edficPreloaderEmblem {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.055);
+  }
+}
+
+@keyframes edficPreloaderSweep {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+.edfic-preloader-ring {
+  animation: edficPreloaderPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.edfic-preloader-ring-2 {
+  animation-delay: 0.55s;
+}
+
+.edfic-preloader-ring-3 {
+  animation-delay: 1.1s;
+}
+
+.edfic-preloader-emblem {
+  animation: edficPreloaderEmblem 1.9s ease-in-out infinite;
+}
+
+.edfic-preloader-sweep {
+  animation: edficPreloaderSweep 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Hero Staggered Entrance */
+@keyframes edficHeroEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.edfic-hero-enter {
+  animation: edficHeroEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.edfic-hero-delay-1 {
+  animation-delay: 90ms;
+}
+
+.edfic-hero-delay-2 {
+  animation-delay: 180ms;
+}
+
+.edfic-hero-delay-3 {
+  animation-delay: 270ms;
+}
+
+.edfic-hero-delay-4 {
+  animation-delay: 340ms;
+}
+
+/* Header Nav Animated Center-Out Underline */
+.edfic-nav-link {
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.edfic-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  border-radius: 9999px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.edfic-nav-link:hover::after,
+.edfic-nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* Interactive Card Micro-Lift & Subtle Sheen Sweep */
+.edfic-card-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.24s ease,
+    box-shadow 0.28s ease;
+}
+
+.edfic-card-interactive::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0) 25%,
+    rgba(124, 224, 239, 0.12) 50%,
+    rgba(255, 255, 255, 0) 75%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.edfic-card-interactive:hover {
+  transform: translateY(-4px);
+}
+
+.edfic-card-interactive:hover::after {
+  transform: translateX(120%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edfic-rotate-slow,
+  .edfic-float-slow,
+  .edfic-particle-drift,
+  .edfic-wave-trace,
+  .edfic-word-in,
+  .edfic-word-out,
+  .edfic-acoustic-ring,
+  .edfic-page-enter,
+  .edfic-route-fade,
+  .edfic-cta-pulse,
+  .edfic-cta-pulse-ring,
+  .edfic-preloader-ring,
+  .edfic-preloader-emblem,
+  .edfic-preloader-sweep,
+  .edfic-hero-enter {
+    animation: none !important;
+  }
+
+  .edfic-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .edfic-accordion-grid,
+  .edfic-nav-link::after,
+  .edfic-card-interactive,
+  .edfic-card-interactive::after {
+    transition: none !important;
+  }
+}
+
+/* FullCalendar clinical teal refinement */
+.fc {
+  --fc-border-color: #dce7e9;
+  --fc-button-bg-color: #0d4a5a;
+  --fc-button-border-color: #0d4a5a;
+  --fc-button-hover-bg-color: #083642;
+  --fc-button-hover-border-color: #083642;
+  --fc-button-active-bg-color: #083642;
+  --fc-button-active-border-color: #083642;
+  --fc-today-bg-color: #e9f3f3;
+  --fc-event-bg-color: #0d4a5a;
+  --fc-event-border-color: #083642;
+  font-size: 0.875rem;
+}
+
+.fc .fc-toolbar-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #24343b;
+}
+
+.fc .fc-button {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+}
+
+/* ============================================================================
+   EDFIC Site-Wide "Dark Teal" Accessibility Theme
+   Activated by <html class="dark-teal"> via ThemeContext & pre-hydration boot.
+   WCAG AA/AAA Contrast Targets:
+   - Canvas (#052028) & Surface (#092D38) with Primary Ink (#F0F9FA): > 14:1
+   - Secondary Body Ink (#D6ECEF) on #092D38: 11.8:1
+   - Muted Ink (#9AC4CC) on #092D38 / #0E3C4A: 7.5:1 / 6.0:1
+   - Accent Links (#7CE0EF / #6FD3E3) on #092D38: > 8.6:1
+   - Interactive Input Borders (#297486) on #092D38: 3.35:1 (WCAG 1.4.11)
+   ============================================================================ */
+
+html.dark-teal {
+  --edfic-primary: #6fd3e3;
+  --edfic-dark: #f0f9fa;
+  --edfic-secondary: #7ce0ef;
+  --edfic-aqua: #0e3c4a;
+  --edfic-offwhite: #092d38;
+  --edfic-polar: #052028;
+  --edfic-text: #d6ecef;
+  --edfic-muted: #9ac4cc;
+  background-color: #052028;
+  color: #d6ecef;
+}
+
+html.dark-teal body,
+html.dark-teal main {
+  background-color: #052028;
+  color: #d6ecef;
+}
+
+/* Primary Canvas & Elevated Card Surfaces */
+html.dark-teal .bg-white:not([class*="dark-teal:bg-"]) {
+  background-color: #092d38;
+}
+
+html.dark-teal .bg-white\/95 {
+  background-color: rgba(9, 45, 56, 0.96);
+}
+
+html.dark-teal .bg-white\/90 {
+  background-color: rgba(9, 45, 56, 0.92);
+}
+
+html.dark-teal .bg-white\/85 {
+  background-color: rgba(9, 45, 56, 0.88);
+}
+
+html.dark-teal .bg-white\/80 {
+  background-color: rgba(9, 45, 56, 0.84);
+}
+
+html.dark-teal .bg-\[\#F8FAFA\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F8FBFC\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F8FCFD\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F7FBFC\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F7FBFD\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F6FAFB\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F6FBFD\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#F4FAFC\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#FAFDFE\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#EEF5F7\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#EEF4F6\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#E9F3F3\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#E9F3F3\]\/80:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#E9F3F3\]\/70:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#E9F3F3\]\/60:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#E6F4F7\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#E5F3F7\]:not([class*="dark-teal:bg-"]),
+html.dark-teal .bg-\[\#D7EEF4\]:not([class*="dark-teal:bg-"]) {
+  background-color: #0e3c4a;
+}
+
+/* Official EDFIC Dark-Teal PNG Logos stay on crisp luminous backing plate */
+html.dark-teal .edfic-logo-plate {
+  background-color: #eef7f9;
+}
+
+/* Keep Google Maps InfoWindow popover readable against its native white card */
+html.dark-teal .edfic-map-infowindow,
+html.dark-teal .gm-style-iw-c {
+  background-color: #ffffff;
+  color: #083642;
+}
+
+html.dark-teal .edfic-map-infowindow .text-\[\#083642\] {
+  color: #083642;
+}
+
+html.dark-teal .edfic-map-infowindow .text-\[\#455A64\] {
+  color: #455a64;
+}
+
+html.dark-teal .edfic-map-infowindow .text-\[\#0D4A5A\] {
+  color: #0d4a5a;
+}
+
+/* Light Gradients Adapted to Deep Oceanic Teal Gradients */
+html.dark-teal .edfic-hero-gradient {
+  background: radial-gradient(circle at 82% 28%, rgba(111, 211, 227, 0.16) 0%, rgba(13, 74, 90, 0.08) 45%, rgba(5, 32, 40, 0) 72%),
+    linear-gradient(125deg, #072b35 0%, #052028 52%, #0a3542 100%);
+}
+
+html.dark-teal [class*="from-\[\#F4FAFC\]"],
+html.dark-teal [class*="from-\[\#EAF5F8\]"],
+html.dark-teal [class*="from-\[\#F7FBFC\]"] {
+  background-image: linear-gradient(145deg, #0d3a47 0%, #092b35 55%, #07222b 100%);
+}
+
+/* Primary Action Teal Surfaces Lift Slightly for Elevated Contrast */
+html.dark-teal .bg-\[\#0D4A5A\]:not([class*="dark-teal:bg-"]) {
+  background-color: #136174;
+}
+
+html.dark-teal .hover\:bg-\[\#083642\]:hover,
+html.dark-teal .hover\:bg-\[\#0D4A5A\]:hover {
+  background-color: #19778d;
+}
+
+html.dark-teal .hover\:bg-\[\#d7e9ea\]:hover,
+html.dark-teal .hover\:bg-\[\#E6F4F7\]:hover,
+html.dark-teal .hover\:bg-\[\#E9F3F3\]:hover,
+html.dark-teal .hover\:bg-\[\#E9F3F3\]\/60:hover,
+html.dark-teal .hover\:bg-\[\#F5FAFB\]:hover,
+html.dark-teal .hover\:bg-\[\#F7FBFC\]:hover,
+html.dark-teal .hover\:bg-\[\#F7FBFD\]:hover,
+html.dark-teal .hover\:bg-\[\#F8FAFA\]:hover,
+html.dark-teal .hover\:bg-\[\#FAFDFE\]:hover,
+html.dark-teal .hover\:bg-white:hover {
+  background-color: #144d5e;
+}
+
+/* Crisp Shadows & Halos for Dark Surfaces */
+html.dark-teal .edfic-card-elevated {
+  box-shadow: 0 22px 55px -16px rgba(2, 14, 18, 0.72), 0 0 0 1px rgba(111, 211, 227, 0.12);
+}
+
+html.dark-teal .edfic-card-soft {
+  box-shadow: 0 14px 36px -14px rgba(2, 14, 18, 0.65), 0 0 0 1px rgba(111, 211, 227, 0.08);
+}
+
+html.dark-teal .edfic-value-card .edfic-value-head::before {
+  background-color: #124858;
+}
+
+html.dark-teal .edfic-radio-chip span::before {
+  background-color: #6fd3e3;
+}
+
+html.dark-teal .edfic-radio-chip input:checked + span {
+  color: #f0f9fa;
+}
+
+/* High-Contrast Typography Scale */
+html.dark-teal .text-\[\#083642\] {
+  color: #f0f9fa;
+}
+
+html.dark-teal .text-\[\#24343B\],
+html.dark-teal .text-\[\#354B54\],
+html.dark-teal .text-\[\#455A64\],
+html.dark-teal .text-\[\#092D38\]\/85 {
+  color: #d6ecef;
+}
+
+html.dark-teal .text-\[\#4F646D\],
+html.dark-teal .text-\[\#55676F\] {
+  color: #b8dde3;
+}
+
+html.dark-teal .text-\[\#65747B\],
+html.dark-teal .text-\[\#65747B\]\/70,
+html.dark-teal .text-\[\#65747B\]\/50,
+html.dark-teal .text-\[\#7D8C93\],
+html.dark-teal .text-\[\#9FB2B9\] {
+  color: #9ac4cc;
+}
+
+html.dark-teal .text-\[\#15803D\] {
+  color: #6ee7b7;
+}
+
+html.dark-teal .text-\[\#287887\] {
+  color: #6fd3e3;
+}
+
+html.dark-teal .text-\[\#0D4A5A\] {
+  color: #7ce0ef;
+}
+
+html.dark-teal .hover\:text-\[\#0D4A5A\]:hover,
+html.dark-teal .group:hover .group-hover\:text-\[\#0D4A5A\] {
+  color: #a8eef8;
+}
+
+html.dark-teal .hover\:text-\[\#083642\]:hover,
+html.dark-teal .hover\:text-\[\#24343B\]:hover {
+  color: #ffffff;
+}
+
+/* Semantic Error & Warning Alerts (WCAG AA on Dark Ground) */
+html.dark-teal .bg-\[\#FEF3F2\] {
+  background-color: #3a1216;
+}
+
+html.dark-teal .text-\[\#B42318\] {
+  color: #fca5a5;
+}
+
+html.dark-teal .border-\[\#B42318\]\/30,
+html.dark-teal .border-\[\#B42318\]\/40 {
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+html.dark-teal .bg-amber-50 {
+  background-color: #36260a;
+}
+
+html.dark-teal .border-amber-200 {
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+html.dark-teal .text-amber-900,
+html.dark-teal .text-amber-950,
+html.dark-teal .text-\[\#B45309\] {
+  color: #fde68a;
+}
+
+/* Borders, Dividers & Interactive Input Outlines */
+html.dark-teal .border-\[\#DCE7E9\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#E9F3F3\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#E6F0F2\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#EEF4F6\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#E3EFF2\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#D5E6EA\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#D2E6EC\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#C9E2E8\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#B6DCE5\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-\[\#B9D3DA\]:not([class*="dark-teal:border-"]),
+html.dark-teal .border-white:not([class*="dark-teal:border-"]) {
+  border-color: #1b5564;
+}
+
+html.dark-teal .border-\[\#C9D9DC\],
+html.dark-teal .border-\[\#0D4A5A\]\/30,
+html.dark-teal .border-\[\#0D4A5A\]\/40 {
+  border-color: #297486;
+}
+
+html.dark-teal .border-\[\#287887\],
+html.dark-teal .border-\[\#0D4A5A\],
+html.dark-teal .hover\:border-\[\#287887\]:hover,
+html.dark-teal .hover\:border-\[\#0D4A5A\]:hover,
+html.dark-teal .hover\:border-\[\#C9E2E8\]:hover {
+  border-color: #4ea5b7;
+}
+
+html.dark-teal .divide-\[\#E9F3F3\] > :not(:last-child),
+html.dark-teal .divide-\[\#DCE7E9\] > :not(:last-child) {
+  border-color: #1b5564;
+}
+
+/* Form Controls & Focus Accessibility */
+html.dark-teal input,
+html.dark-teal select,
+html.dark-teal textarea {
+  color-scheme: dark;
+}
+
+html.dark-teal input::placeholder,
+html.dark-teal textarea::placeholder {
+  color: #88b5be;
+}
+
+html.dark-teal input:focus-visible,
+html.dark-teal select:focus-visible,
+html.dark-teal textarea:focus-visible,
+html.dark-teal button:focus-visible,
+html.dark-teal a:focus-visible {
+  outline-color: #6fd3e3;
+}
+
+html.dark-teal .focus-visible\:border-\[\#0D4A5A\]:focus-visible {
+  border-color: #6fd3e3;
+}
+
+html.dark-teal .focus-visible\:ring-\[\#0D4A5A\]\/20:focus-visible {
+  --tw-ring-color: rgba(111, 211, 227, 0.35);
+}
+
+/* Progress & Inactive Dots */
+html.dark-teal .bg-\[\#C8DDE3\] {
+  background-color: #1f5c6c;
+}
+
+/* FullCalendar Dark Teal Refinement */
+html.dark-teal .fc {
+  --fc-border-color: #1b5564;
+  --fc-page-bg-color: #092d38;
+  --fc-neutral-bg-color: #0e3c4a;
+  --fc-list-event-hover-bg-color: #134b5c;
+  --fc-today-bg-color: rgba(111, 211, 227, 0.14);
+  --fc-button-bg-color: #136174;
+  --fc-button-border-color: #297486;
+  --fc-button-hover-bg-color: #19778d;
+  --fc-button-hover-border-color: #4ea5b7;
+  --fc-button-active-bg-color: #1f8ea6;
+  --fc-button-active-border-color: #6fd3e3;
+  --fc-event-bg-color: #156b7f;
+  --fc-event-border-color: #2e8aa0;
+  color: #d6ecef;
+}
+
+html.dark-teal .fc .fc-toolbar-title,
+html.dark-teal .fc .fc-col-header-cell-cushion,
+html.dark-teal .fc .fc-daygrid-day-number,
+html.dark-teal .fc .fc-timegrid-axis-cushion,
+html.dark-teal .fc .fc-timegrid-slot-label-cushion {
+  color: #d6ecef;
+}
+
+html.dark-teal .fc .fc-col-header-cell {
+  background-color: #0e3c4a;
+}
+
