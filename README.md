@@ -12,17 +12,17 @@ Configure these exact settings in **Hostinger hPanel -> Websites -> Node.js Web 
 | :--- | :--- |
 | **Framework preset** | `Express` |
 | **Node.js version** | `22.x` |
-| **Application type** | Server-side Node.js web application (Express serves `/api/v1/*` and the compiled Vite SPA from `dist/client`) |
+| **Application type** | Server-side Node.js web application (Express serves `/api/v1/*` and the compiled Vite SPA from `dist/`) |
 | **Root directory** | `./` (or `/`, the folder containing `package.json` and `server.js`) |
 | **Package manager** | `npm` |
 | **Install command** | `npm install` (or `npm ci`) |
 | **Build command** | `npm run build` |
-| **Output directory** | *(Leave empty — Express serves `dist/client` dynamically via `server.js`)* |
+| **Output directory** | `dist` *(served automatically by Express via `server.js`)* |
 | **Entry file** | `server.js` |
 | **Start command** | `npm start` (`node server.js`) |
-| **Health check path** | `/health` |
+| **Health check path** | `/health` (and `/api/health`) |
 
-> **Note:** `server.js` listens on `process.env.PORT || 3000` bound to `0.0.0.0`. If `dist/server/server.js` or `dist/client/index.html` is absent on first launch, `server.js` automatically runs `npm run build` before starting Express.
+> **Note:** `npm run build` compiles the React frontend into `dist/` and bundles `server.ts` + `server/app.ts` into root `server.js` (ESM, external `node_modules`). At runtime, `server.js` binds to `process.env.HOST || '0.0.0.0'` on `process.env.PORT || 3000` (also supporting LiteSpeed Unix sockets).
 
 ---
 
@@ -67,5 +67,5 @@ Add these environment variables manually inside **Hostinger hPanel -> Node.js We
 If deploying by uploading a `.zip` file instead of GitHub:
 
 - **Important:** Compress the **files inside** the project folder so `package.json`, `package-lock.json`, and `server.js` are at the **root** of the `.zip` archive (not nested inside an outer parent directory).
-- **Include:** `package.json`, `package-lock.json`, `server.js`, `server.ts`, `index.html`, `tsconfig.json`, `vite.config.ts`, `.env.example`, `README.md`, `src/`, `public/`, `prisma/schema.prisma`, `prisma/schema.mysql.prisma`, `prisma/migrations/`.
+- **Include:** `package.json`, `package-lock.json`, `server.js`, `server.ts`, `index.html`, `tsconfig.json`, `vite.config.ts`, `.env.example`, `README.md`, `server/`, `src/`, `public/`, `prisma/schema.prisma`, `prisma/schema.mysql.prisma`, `prisma/migrations/`.
 - **Exclude:** `node_modules/`, `dist/`, `.env` / `.env.*` (except `.env.example`), `bun.lock`, `prisma/dev.db*`, `storage/`, `.aistudio/`, `.git/`.

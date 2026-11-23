@@ -1,4 +1,6 @@
 import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 import { prisma } from './lib/prisma.ts';
 import { hashPassword } from './lib/security.ts';
 
@@ -593,6 +595,14 @@ EDFIC strictly adheres to the Pre-Conception and Pre-Natal Diagnostic Techniques
   },
 ];
 
+function runLocalPrismaDbPush(): void {
+  const localPrismaBin = path.resolve(process.cwd(), 'node_modules', '.bin', 'prisma');
+  const cmd = fs.existsSync(localPrismaBin)
+    ? `"${localPrismaBin}" db push --skip-generate`
+    : 'npx prisma db push --skip-generate';
+  execSync(cmd, { stdio: 'inherit', env: { ...process.env } });
+}
+
 async function ensureSqliteTablesExist(): Promise<void> {
   const dbUrl = process.env.DATABASE_URL || '';
   if (!dbUrl.startsWith('file:')) return;
@@ -602,11 +612,11 @@ async function ensureSqliteTablesExist(): Promise<void> {
     );
     if (rows.length === 0) {
       console.log('SQLite tables missing; running prisma db push --skip-generate...');
-      execSync('npx prisma db push --skip-generate', { stdio: 'inherit' });
+      runLocalPrismaDbPush();
     }
   } catch (err) {
     console.warn('SQLite schema check failed, attempting prisma db push:', err);
-    execSync('npx prisma db push --skip-generate', { stdio: 'inherit' });
+    runLocalPrismaDbPush();
   }
 }
 

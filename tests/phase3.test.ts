@@ -2,20 +2,20 @@ import fs from 'fs';
 import http from 'http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createEdficApp } from '../server';
-import { prisma } from '../src/server/lib/prisma';
+import { prisma } from '../server/lib/prisma';
 import {
   AUTH_COOKIE_NAME,
   CSRF_COOKIE_NAME,
   generateCsrfToken,
   signSessionToken,
-} from '../src/server/lib/security';
-import { resolvePrivateFile, EVIDENCE_DIR } from '../src/server/lib/storage';
+} from '../server/lib/security';
+import { resolvePrivateFile, EVIDENCE_DIR } from '../server/lib/storage';
 import {
   bookAppointmentAtomic,
   expireStaleReservations,
   getAvailableSlots,
   holdSlotAtomic,
-} from '../src/server/services/scheduling';
+} from '../server/services/scheduling';
 
 // Far-future deterministic test dates so tests never collide with current clock or seeded rows
 const TEST_MONDAY = '2099-06-15'; // Monday

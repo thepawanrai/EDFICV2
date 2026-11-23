@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, Clock, FileCheck2 } from 'lucide-react';
 import { PublicLayout } from '../../components/layout/PublicLayout';
 import { SeoHead } from '../../components/seo/SeoHead';
 import { apiFetch } from '../../lib/api';
+import { FALLBACK_PUBLIC_CATEGORIES } from '../../lib/publicCatalogFallback';
 
 interface ServiceDetail {
   id: string;
@@ -27,9 +28,26 @@ export function ServiceDetailPage() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['public-service', slug],
-    queryFn: () =>
-      apiFetch<{ service: ServiceDetail }>(`/api/v1/public/services/${slug}`),
+    queryFn: async () => {
+      try {
+        return await apiFetch<{ service: ServiceDetail }>(`/api/v1/public/services/${slug}`);
+      } catch (err) {
+        for (const cat of FALLBACK_PUBLIC_CATEGORIES) {
+          const match = cat.services.find((s) => s.slug === slug);
+          if (match) {
+            return {
+              service: {
+                ...match,
+                category: { id: cat.id, slug: cat.slug, name: cat.name },
+              },
+            };
+          }
+        }
+        throw err;
+      }
+    },
     enabled: Boolean(slug),
+    retry: 1,
   });
 
   const svc = data?.service;

@@ -469,7 +469,7 @@ export function HomePage() {
               </p>
             </div>
 
-            <div className="-mt-24 px-2 sm:px-5">
+            <div className="relative z-10 -mt-24 px-2 sm:px-5">
               {servicesLoading ? (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
                   {[1, 2, 3, 4, 5].map((n) => (
@@ -487,8 +487,7 @@ export function HomePage() {
                       <Link
                         key={cat.id}
                         to={`/services?category=${cat.slug}`}
-                        style={{ transitionDelay: `${idx * 70}ms` }}
-                        className="edfic-reveal edfic-card-interactive group flex flex-col items-center justify-center rounded-2xl border border-[#E6F0F2] bg-white px-5 py-8 text-center hover:border-[#0D4A5A] hover:shadow-[0_22px_42px_-16px_rgba(13,74,90,0.22)] edfic-card-soft"
+                        className="edfic-card-interactive group flex flex-col items-center justify-center rounded-2xl border border-[#E6F0F2] bg-white px-5 py-8 text-center hover:border-[#0D4A5A] hover:shadow-[0_22px_42px_-16px_rgba(13,74,90,0.22)] edfic-card-soft"
                       >
                         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#F4FAFC] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#E6F4F7]">
                           <Icon className="h-10 w-10 stroke-[1.5] text-[#287887] transition-colors duration-300 group-hover:text-[#0D4A5A]" />
@@ -722,13 +721,10 @@ export function HomePage() {
                 </div>
               </div>
 
-              {/* Oversized Breaking Shield Crest with Subtle Scroll Drift */}
+              {/* Centered Shield Crest */}
               <div className="lg:col-span-5 flex justify-center lg:justify-end">
                 <div
-                  className="relative lg:-mt-20 flex h-56 w-52 flex-col items-center justify-center rounded-t-[2.25rem] rounded-b-[5.5rem] border-[6px] border-white dark-teal:border-[#052028] bg-gradient-to-b from-[#083642] via-[#0D4A5A] to-[#287887] p-6 text-center shadow-2xl transition-transform duration-300 hover:scale-[1.03]"
-                  style={{
-                    transform: `translateY(${-Math.min(scrollProgress * 0.25, 10)}px)`,
-                  }}
+                  className="relative flex h-56 w-52 flex-col items-center justify-center rounded-t-[2.25rem] rounded-b-[5.5rem] border-[6px] border-white dark-teal:border-[#052028] bg-gradient-to-b from-[#083642] via-[#0D4A5A] to-[#287887] p-6 text-center shadow-2xl transition-transform duration-300 hover:scale-[1.03]"
                 >
                   <HeartPulse className="h-14 w-14 text-[#A5E4EB]" />
                   <p className="mt-3 font-display text-sm font-bold text-white">

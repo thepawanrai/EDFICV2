@@ -16,7 +16,7 @@ export default defineConfig(() => {
           if (error) {
             return;
           }
-          const distDir = path.resolve(import.meta.dirname, 'dist/client');
+          const distDir = path.resolve(import.meta.dirname, 'dist');
           const srcAssets = path.resolve(import.meta.dirname, 'src/assets');
           const distAssets = path.resolve(distDir, 'src/assets');
           if (fs.existsSync(distDir) && fs.existsSync(srcAssets)) {
@@ -26,7 +26,7 @@ export default defineConfig(() => {
       },
     ],
     build: {
-      outDir: 'dist/client',
+      outDir: 'dist',
       emptyOutDir: true,
     },
     resolve: {

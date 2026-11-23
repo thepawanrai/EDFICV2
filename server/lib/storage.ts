@@ -7,8 +7,15 @@ export const REPORTS_DIR = path.join(STORAGE_ROOT, 'reports');
 export const EVIDENCE_DIR = path.join(STORAGE_ROOT, 'evidence');
 
 export function ensureStorageDirectories(): void {
-  fs.mkdirSync(REPORTS_DIR, { recursive: true });
-  fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
+  try {
+    fs.mkdirSync(REPORTS_DIR, { recursive: true });
+    fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
+  } catch (err) {
+    console.warn(
+      'Unable to initialize storage directories at startup:',
+      err instanceof Error ? err.message : err
+    );
+  }
 }
 
 export function isValidPdfBuffer(buffer: Buffer): boolean {

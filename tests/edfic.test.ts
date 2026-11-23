@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { scanMedicalContentCompliance } from '../src/server/services/compliance';
-import { minutesToTime, timeToMinutes } from '../src/server/services/scheduling';
-import { isValidPdfBuffer } from '../src/server/lib/storage';
+import { scanMedicalContentCompliance } from '../server/services/compliance';
+import { minutesToTime, timeToMinutes } from '../server/services/scheduling';
+import { isValidPdfBuffer } from '../server/lib/storage';
 
 describe('EDFIC Compliance Scanner', () => {
   it('approves factual clinical copy without pricing or prohibited claims', () => {

@@ -3,17 +3,17 @@ import fs from 'fs';
 import http from 'http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createEdficApp } from '../server';
-import { prisma } from '../src/server/lib/prisma';
+import { prisma } from '../server/lib/prisma';
 import {
   AUTH_COOKIE_NAME,
   CSRF_COOKIE_NAME,
   generateCsrfToken,
   signSessionToken,
-} from '../src/server/lib/security';
-import { EVIDENCE_DIR, REPORTS_DIR, resolvePrivateFile, savePrivateFile } from '../src/server/lib/storage';
-import { scanMedicalContentCompliance } from '../src/server/services/compliance';
-import { validateOutboundUrl } from '../src/server/services/automation';
-import { expireStaleReservations } from '../src/server/services/scheduling';
+} from '../server/lib/security';
+import { EVIDENCE_DIR, REPORTS_DIR, resolvePrivateFile, savePrivateFile } from '../server/lib/storage';
+import { scanMedicalContentCompliance } from '../server/services/compliance';
+import { validateOutboundUrl } from '../server/services/automation';
+import { expireStaleReservations } from '../server/services/scheduling';
 
 const PHASE6_PHONES = ['9666110001', '9666110002', '9666110003'];
 const PHASE6_DATE = '2099-10-18';

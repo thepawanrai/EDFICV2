@@ -12,9 +12,9 @@
 | **Install Command** | `npm ci` (or `npm install`) |
 | **Build Command** | `npm run build` |
 | **Start Command** | `npm start` (`node server.js`) |
-| **Main Entry File** | `server.js` (boots `dist/server/server.js`, auto-builds if `dist/` is absent) |
-| **Frontend Static Output** | `dist/client` |
-| **Health Endpoint** | `/health` |
+| **Main Entry File** | `server.js` (generated from `server.ts` + `server/app.ts` during `npm run build`) |
+| **Frontend Static Output** | `dist` |
+| **Health Endpoint** | `/health` and `/api/health` |
 
 > **ZIP Upload Note**: If uploading a `.zip` instead of importing from GitHub, compress the **contents** of the project folder so `package.json`, `package-lock.json`, and `server.js` sit directly at the root of the ZIP (not nested inside an outer folder), and exclude `node_modules/`, `.env`, and `prisma/dev.db*`.
 
@@ -63,13 +63,13 @@ Configure these in Hostinger Node.js Web App environment variables (never commit
 ## 4. Build & Runtime Behavior
 
 1. `npm run build` executes:
-   - `npx prisma generate`
-   - `vite build` → outputs React SPA to `dist/client`
-   - `esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server/server.js`
-2. `npm start` runs `node dist/server/server.js`:
+   - `prisma generate`
+   - `vite build` → outputs React SPA to `dist/`
+   - `esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=server.js`
+2. `npm start` runs `node server.js`:
    - No Vite dev server is started or required in production.
-   - Express serves `dist/client` assets and routes all non-API SPA requests to `dist/client/index.html`.
-   - `/health` verifies Prisma connectivity (`SELECT 1`).
+   - Express serves `dist/` static assets and routes all non-API SPA requests to `dist/index.html`.
+   - `/health` and `/api/health` return JSON status, uptime, timestamp, and environment.
    - `SIGINT` and `SIGTERM` trigger graceful HTTP server closure and `prisma.$disconnect()`.
 
 ---

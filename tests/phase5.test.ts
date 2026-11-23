@@ -3,15 +3,15 @@ import fs from 'fs';
 import http from 'http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createEdficApp } from '../server';
-import { prisma } from '../src/server/lib/prisma';
+import { prisma } from '../server/lib/prisma';
 import {
   AUTH_COOKIE_NAME,
   CSRF_COOKIE_NAME,
   generateCsrfToken,
   signSessionToken,
-} from '../src/server/lib/security';
-import { REPORTS_DIR, resolvePrivateFile } from '../src/server/lib/storage';
-import { dispatchN8nEvent, dispatchWhatsAppMessage } from '../src/server/services/automation';
+} from '../server/lib/security';
+import { REPORTS_DIR, resolvePrivateFile } from '../server/lib/storage';
+import { dispatchN8nEvent, dispatchWhatsAppMessage } from '../server/services/automation';
 
 const PHASE5_PHONES = ['9777110001', '9777110002', '9777110003'];
 const PHASE5_TEST_DATE = '2099-09-12';

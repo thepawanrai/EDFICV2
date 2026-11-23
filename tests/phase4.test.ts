@@ -2,14 +2,14 @@ import fs from 'fs';
 import http from 'http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createEdficApp } from '../server';
-import { prisma } from '../src/server/lib/prisma';
+import { prisma } from '../server/lib/prisma';
 import {
   AUTH_COOKIE_NAME,
   CSRF_COOKIE_NAME,
   generateCsrfToken,
   signSessionToken,
-} from '../src/server/lib/security';
-import { REPORTS_DIR, resolvePrivateFile } from '../src/server/lib/storage';
+} from '../server/lib/security';
+import { REPORTS_DIR, resolvePrivateFile } from '../server/lib/storage';
 
 const PHASE4_PHONES = [
   '9888110001',
