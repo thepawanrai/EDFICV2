@@ -58,13 +58,14 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
     },
   ]);
 
-  const scrollBottomRef = useRef<HTMLDivElement>(null);
+  const messagesScrollRef = useRef<HTMLDivElement>(null);
   const { data: servicesData } = usePublicServices();
   const allServices = servicesData?.categories.flatMap((c) => c.services) ?? [];
 
   useEffect(() => {
-    if (chatOpen) {
-      scrollBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatOpen && messagesScrollRef.current) {
+      const el = messagesScrollRef.current;
+      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
     }
   }, [messages, showReceptionForm, chatOpen]);
 
@@ -203,18 +204,18 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
   };
 
   return (
-    <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3">
+    <div className="pointer-events-none fixed bottom-3 right-3 sm:bottom-5 sm:right-6 z-[60] flex max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-2.5rem)] max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-3rem)] flex-col items-end gap-2.5 sm:gap-3">
       {/* Automated Reception Chatbot Panel */}
       {chatOpen && (
         <div
           role="dialog"
           aria-label="EDFIC Automated Reception Chatbot"
-          className="edfic-tab-fade w-[min(calc(100vw-2rem),390px)] overflow-hidden rounded-3xl border border-[#DCE7E9] bg-white shadow-[0_24px_64px_-16px_rgba(13,74,90,0.28)]"
+          className="edfic-tab-fade pointer-events-auto flex w-[min(calc(100vw-1.5rem),390px)] max-h-[min(560px,calc(100dvh-5.5rem))] sm:max-h-[min(560px,calc(100dvh-6.5rem))] flex-col overflow-hidden rounded-3xl border border-[#DCE7E9] bg-white shadow-[0_24px_64px_-16px_rgba(13,74,90,0.28)]"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#083642] via-[#0D4A5A] to-[#287887] px-5 py-4 text-white flex items-center justify-between">
+          <div className="shrink-0 bg-gradient-to-r from-[#083642] via-[#0D4A5A] to-[#287887] px-4 py-3.5 sm:px-5 sm:py-4 text-white flex items-center justify-between gap-2">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-white">
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-white/15 text-white">
                 <Bot className="h-5 w-5" />
               </div>
               <div className="min-w-0">
@@ -230,14 +231,17 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
               type="button"
               onClick={() => setChatOpen(false)}
               aria-label="Close reception chat"
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 cursor-pointer"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
 
           {/* Messages Stream */}
-          <div className="max-h-80 overflow-y-auto bg-[#F8FCFD] p-4 space-y-3">
+          <div
+            ref={messagesScrollRef}
+            className="min-h-0 flex-initial overflow-y-auto overscroll-contain bg-[#F8FCFD] p-3.5 sm:p-4 space-y-3"
+          >
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -370,11 +374,10 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
               </form>
             )}
 
-            <div ref={scrollBottomRef} />
           </div>
 
           {/* Chat Composer Footer */}
-          <div className="border-t border-[#DCE7E9] bg-white p-3 space-y-2">
+          <div className="shrink-0 border-t border-[#DCE7E9] bg-white p-3 space-y-2">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -387,7 +390,7 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Ask about timings, scans, prep, EDF-ref..."
-                className="flex-1 rounded-full border border-[#DCE7E9] bg-[#F8FAFA] px-3.5 py-2 text-xs text-[#24343B] focus:border-[#0D4A5A] focus:bg-white focus:outline-none"
+                className="min-w-0 flex-1 rounded-full border border-[#DCE7E9] bg-[#F8FAFA] px-3.5 py-2 text-xs text-[#24343B] focus:border-[#0D4A5A] focus:bg-white focus:outline-none"
               />
               <button
                 type="submit"
@@ -399,7 +402,7 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
               </button>
             </form>
             {!showReceptionForm && (
-              <div className="flex items-center justify-between px-1 text-[11px] text-[#65747B]">
+              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-1 text-[11px] text-[#65747B]">
                 <span>Need direct callback?</span>
                 <button
                   type="button"
@@ -415,7 +418,11 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
       )}
 
       {/* Compact Circular Contact CTAs Stack: WhatsApp · Call · Reception Chat */}
-      <div className="flex flex-col items-end gap-2.5">
+      <div
+        className={`pointer-events-auto flex shrink-0 items-end gap-2.5 ${
+          chatOpen ? 'flex-row items-center' : 'flex-col'
+        }`}
+      >
         {/* 1. Circular WhatsApp CTA */}
         {waHref ? (
           <a
@@ -426,7 +433,11 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
             title="WhatsApp EDFIC"
             className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#15803D] text-white shadow-[0_10px_24px_-6px_rgba(21,128,61,0.55)] transition-all duration-300 hover:scale-110 hover:bg-[#166534]"
           >
-            <span className="pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+            <span
+              className={`pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 ${
+                chatOpen ? 'hidden' : 'group-hover:opacity-100'
+              }`}
+            >
               WhatsApp
             </span>
             <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden="true">
@@ -445,7 +456,11 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
             title="WhatsApp EDFIC"
             className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#15803D] text-white shadow-[0_10px_24px_-6px_rgba(21,128,61,0.55)] transition-all duration-300 hover:scale-110 hover:bg-[#166534] cursor-pointer"
           >
-            <span className="pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+            <span
+              className={`pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 ${
+                chatOpen ? 'hidden' : 'group-hover:opacity-100'
+              }`}
+            >
               WhatsApp
             </span>
             <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden="true">
@@ -462,7 +477,11 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
             title="Call EDFIC"
             className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#287887] text-white shadow-[0_10px_24px_-6px_rgba(40,120,135,0.5)] transition-all duration-300 hover:scale-110 hover:bg-[#083642]"
           >
-            <span className="pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+            <span
+              className={`pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 ${
+                chatOpen ? 'hidden' : 'group-hover:opacity-100'
+              }`}
+            >
               Call Desk
             </span>
             <Phone className="h-5 w-5" />
@@ -481,7 +500,11 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
             title="Call EDFIC"
             className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-[#287887] text-white shadow-[0_10px_24px_-6px_rgba(40,120,135,0.5)] transition-all duration-300 hover:scale-110 hover:bg-[#083642] cursor-pointer"
           >
-            <span className="pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+            <span
+              className={`pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 ${
+                chatOpen ? 'hidden' : 'group-hover:opacity-100'
+              }`}
+            >
               Call Desk
             </span>
             <Phone className="h-5 w-5" />
@@ -497,7 +520,11 @@ export function FloatingContactWidget({ clinic }: { clinic?: PublicClinicInfo })
           title="Reception Chat"
           className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#287887] to-[#0D4A5A] text-white shadow-[0_12px_28px_-6px_rgba(13,74,90,0.58)] transition-all duration-300 hover:scale-110 hover:from-[#0D4A5A] hover:to-[#083642] cursor-pointer"
         >
-          <span className="pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 group-hover:opacity-100">
+          <span
+            className={`pointer-events-none absolute right-14 whitespace-nowrap rounded-full bg-[#083642] px-3 py-1 text-[11px] font-semibold text-white opacity-0 shadow-md transition-opacity duration-200 ${
+              chatOpen ? 'hidden' : 'group-hover:opacity-100'
+            }`}
+          >
             {chatOpen ? 'Close Chat' : 'Reception Chat'}
           </span>
           {chatOpen ? (

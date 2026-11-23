@@ -1,10 +1,28 @@
 @import "tailwindcss";
 @custom-variant dark-teal (&:where(.dark-teal, .dark-teal *));
 
+@font-face {
+  font-family: 'EdficAmpersand';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/edfic-ampersand.woff2') format('woff2');
+  unicode-range: U+0026;
+}
+
+@font-face {
+  font-family: 'EdficAmpersand';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/edfic-ampersand-italic.woff2') format('woff2');
+  unicode-range: U+0026;
+}
+
 @theme {
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
-  --font-display: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: 'EdficAmpersand', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'EdficAmpersand', 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-display: 'EdficAmpersand', 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
 }
 
 @layer base {
@@ -34,7 +52,7 @@
   h5,
   h6,
   .font-display {
-    font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
+    font-family: 'EdficAmpersand', 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
   }
 
   .font-mono-tabular {
@@ -638,7 +656,7 @@
 }
 
 .fc .fc-toolbar-title {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'EdficAmpersand', 'Playfair Display', Georgia, serif;
   font-size: 1.05rem;
   font-weight: 600;
   color: #24343b;
